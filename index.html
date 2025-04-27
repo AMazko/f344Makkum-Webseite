@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ferienhaus F344 – Startseite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      overflow-x: hidden;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      height: 60px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+    }
+    nav a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      margin-top: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      overflow: hidden;
+    }
+    .slideshow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 1s ease-in-out;
+    }
+    .hero-content {
+      z-index: 1;
+      background-color: rgba(0,0,0,0.5);
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 90%;
+    }
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      max-width: 700px;
+    }
+    .hero a.cta {
+      background: white;
+      color: #333;
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .hero a.cta:hover {
+      background: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ferienhaus F344</h1>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="unterkunft.html">Unterkunft</a>
+      <a href="preise.html">Preise</a>
+      <a href="buchung.html">Buchung</a>
+      <a href="park.html">Park</a>
+      <a href="kontakt.html">Kontakt</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <div class="slideshow"></div>
+    <div class="hero-content">
+      <h2>Willkommen im Ferienhaus F344</h2>
+      <p>Genie&szlig;en Sie einen entspannten Urlaub am Ijsselmeer im familienfreundlichen Park De Holle Poarte. Unser gem&uuml;tliches Ferienhaus liegt nur wenige Schritte vom Strand entfernt und bietet alles f&uuml;r eine erholsame Auszeit.</p>
+      <a class="cta" href="buchung.html">Jetzt buchen</a>
+    </div>
+  </section>
+  <script>
+    const bilder = [
+      'Strandpano.jpg',
+      'Aussenansicht.jpg',
+      'a_wooden_bridge_.jpg',
+      'a_bench_sitting_.jpg',
+      'Lageplan_de_la_Poarte_1.jpg'
+    ];
+
+    let aktuellesBild = 0;
+    const slideshow = document.querySelector('.slideshow');
+    slideshow.style.backgroundImage = `url('${bilder[aktuellesBild]}')`;
+
+    setInterval(() => {
+      aktuellesBild = (aktuellesBild + 1) % bilder.length;
+      slideshow.style.backgroundImage = `url('${bilder[aktuellesBild]}')`;
+    }, 6000);
+  </script>
+</body>
+</html>

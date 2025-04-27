@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unterkunft – Ferienhaus F344</title>
+  <link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
+    header { background: #008cba; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; margin-left: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 2rem; max-width: 1000px; margin: auto; background: white; }
+    h1 { color: #008cba; }
+    .swiper { width: 100%; height: 400px; margin-bottom: 2rem; }
+    .swiper-slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; cursor: pointer; }
+    dl { display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; }
+    dt { font-weight: bold; }
+    dd { margin: 0 0 1rem 0; }
+    @media (max-width: 600px) { dl { grid-template-columns: 1fr; } }
+    /* Lightbox Styles */
+    .lightbox-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center;
+      z-index: 1000;
+    }
+    .lightbox-overlay img {
+      max-width: 90%; max-height: 90%; border-radius: 8px;
+    }
+    .lightbox-overlay .close-btn {
+      position: absolute; top: 20px; right: 20px; font-size: 2rem; color: white; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Ferienhaus F344</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="unterkunft.html">Unterkunft</a>
+      <a href="preise.html">Preise</a>
+      <a href="buchung.html">Buchung</a>
+      <a href="park.html">Park</a>
+      <a href="makkum.html">Makkum</a>
+      <a href="kontakt.html">Kontakt</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Unterkunft</h1>
+
+    <!-- Bildgalerie mit Swiper.js -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="images/Aussenansicht.jpg" alt="Außenansicht"></div>
+        <div class="swiper-slide"><img src="images/Stegterasse.jpg" alt="Stegterrasse"></div>
+        <div class="swiper-slide"><img src="images/Wohnzimmer1.jpg" alt="Wohnzimmer 1"></div>
+        <div class="swiper-slide"><img src="images/Wohnzimmer2.jpg" alt="Wohnzimmer 2"></div>
+        <div class="swiper-slide"><img src="images/Schlafzimmer_Eltern.jpg" alt="Schlafzimmer Eltern"></div>
+        <div class="swiper-slide"><img src="images/Schlafzimmer_Kinder.jpg" alt="Schlafzimmer Kinder"></div>
+        <div class="swiper-slide"><img src="images/KuecheundEsszimmer.jpg" alt="Küche und Esszimmer"></div>
+        <div class="swiper-slide"><img src="images/Bad.jpg" alt="Badezimmer"></div>
+        <div class="swiper-slide"><img src="images/Pirateninsel.jpg" alt="Blick auf Pirateninsel"></div>
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+      <span class="close-btn" id="lightboxClose">&times;</span>
+      <img id="lightboxImage" src="#" alt="">
+    </div>
+
+    <!-- Unterkunfts-Details -->
+    <dl>
+      <dt>Maximale Personenanzahl</dt><dd>2 Erwachsene, 3 Kinder</dd>
+      <dt>Schlafzimmer &amp; Betten</dt><dd>Schlafzimmer 1: Hochbett (140 cm unten, 90 cm oben), Schlafzimmer: 1 Hochbett 90 cm Wohnzimmer: Schlafsofa</dd>
+      <dt>WLAN</dt><dd>Kein WLAN (Park-WLAN optional buchbar)</dd>
+      <dt>Küche</dt><dd>Gasherd, Kühlschrank mit Gefrierfach, Mini-Backofen, Toaster, Kaffeemaschine, Wasserkocher</dd>
+      <dt>Spülmaschine</dt><dd>Nein</dd>
+      <dt>Waschmaschine</dt><dd>Bei der Park-Rezeption ca. 5 €</dd>
+      <dt>TV</dt><dd>Deutsche Kanäle</dd>
+      <dt>Heizung</dt><dd>Pelletofen im Wohnzimmer, Elektroheizung im Bad</dd>
+      <dt>Parkplatz</dt><dd>1 Stellplatz in unmittelbarer Nähe</dd>
+      <dt>Entfernung zum Strand</dt><dd>Weniger als 2 Minuten</dd>
+      <dt>Sport und Freizeitd</dt><dd>2 Fahrräder, 1 SUP, Diverse Sportbälle und Beachspielzeug</dd>
+      <dt>Nebenkosten</dt><dd>Strom, Wasser, Gas inklusive</dd>
+      <dt>Kaution</dt><dd>100 €</dd>
+      <dt>Endreinigung</dt><dd>45 €</dd>
+      <dt>Haustiere erlaubt?</dt><dd>Nein</dd>
+      <dt>Rauchen</dt><dd>Nein</dd>
+      <dt>Grill &amp; Terrasse</dt><dd>Kohlegrill und Terrassenausstattung vorhanden</dd>
+      <dt>Check-in / Check-out</dt><dd>Anreise ab 15:00 Uhr, Abreise bis 10:30 Uhr</dd>
+      <dt>Mindestaufenthalt</dt><dd>Hauptsaison: Sonntag bis Sonntag, Nebensaison: ab 2 Nächten</dd>
+      <dt>Stornierungsbedingungen</dt><dd>Bis 2 Wochen vor Anreise kostenfrei, danach 50 %</dd>
+    </dl>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <script>
+    // Swiper initialisieren
+    const swiper = new Swiper('.mySwiper', {
+      loop: true,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      autoplay: { delay: 5000 }
+    });
+
+    // Lightbox-Elemente
+    const lightboxOverlay = document.getElementById('lightboxOverlay');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    // Klick auf Swiper-Bilder
+    document.querySelectorAll('.swiper-slide img').forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt;
+        lightboxOverlay.style.display = 'flex';
+      });
+    });
+
+    // Schließen-Button
+    lightboxClose.addEventListener('click', () => {
+      lightboxOverlay.style.display = 'none';
+    });
+
+    // Klick außerhalb des Bildes schließt Lightbox
+    lightboxOverlay.addEventListener('click', e => {
+      if (e.target === lightboxOverlay) {
+        lightboxOverlay.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

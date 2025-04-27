@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buchung – F344</title>
+  <!-- Flatpickr CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+  <!-- Flatpickr JS + German locale -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js"></script>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 2rem; }
+    h1 { text-align: center; }
+    form { background: white; padding: 2rem; max-width: 600px; margin: auto; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    label { font-weight: bold; margin-top: 1rem; display: block; }
+    input, select, textarea { width: 100%; padding: .5rem; margin-top: .5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .inline { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .inline input { flex: 1; }
+    .reset-btn { background: #ccc; color: #333; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; display: block; margin-bottom: 1rem; }
+    button { background: #0077aa; color: white; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; width: 100%; margin-top: 1.5rem; }
+    button:hover { background: #005f85; }
+    .legend { margin-top: 1rem; text-align: center; }
+    .legend span { margin: 0 1rem; display: inline-block; }
+    .box { width: 12px; height: 12px; display: inline-block; margin-right: 5px; vertical-align: middle; }
+    .red { background: red; } .yellow { background: yellow; } .green { background: green; }
+  </style>
+</head>
+<body>
+  <h1>Buchungsanfrage Ferienhaus F344</h1>
+  <form id="bookingForm">
+    <button type="button" class="reset-btn" id="resetBtn">Auswahl zurücksetzen</button>
+    <label for="dates">Zeitraum auswählen:</label>
+    <input id="dates" name="dates" readonly placeholder="Anreise bis Abreise">
+    <div class="legend">
+      <span><span class="box red"></span> Belegt</span>
+      <span><span class="box yellow"></span> Angefragt</span>
+      <span><span class="box green"></span> Frei</span>
+    </div>
+    <div class="inline">
+      <div><label for="adults">Erwachsene:</label><input type="number" id="adults" name="adults" min="1" value="2"></div>
+      <div><label for="children">Kinder:</label><input type="number" id="children" name="children" min="0" value="0"></div>
+    </div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" required>
+    <label for="email">E-Mail:</label>
+    <input type="email" name="email" required>
+    <label for="notes">Anmerkungen:</label>
+    <textarea name="notes" rows="4"></textarea>
+    <button type="submit">Anfrage senden</button>
+  </form>
+
+  <script>
+    // === EmailJS-Konfiguration ===
+    emailjs.init("Yb22REbEP0fT4cT4z");
+    const SERVICE_ID     = "service_v7hpebh";      // z.B. "gmail"
+    const TEMPLATE_GUEST = "template_41a287w";  // ID des Gast-Templates
+    const TEMPLATE_HOST  = "template_tvyukq7";   // ID des Host-Templates
+    const HOST_EMAIL     = "F344makkum@gmail.com";
+
+    // === Google Sheet CSV URL ===
+    const SHEET_CSV_URL =
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpCjiJzenS0a4dgX4liMhC5X5OylUgPl3ZHTB1PH8emjI8QO95kaHeef2B3DCK7lqJRZgddc7GNF1h/pub?gid=0&single=true&output=csv';
+
+    // === Google Form POST-Endpoint & Entry-Keys ===
+    const FORM_URL     = 'https://docs.google.com/forms/d/e/1FAIpQLScwMqt-8oddiQSou4MSV67-L2hZy0HHpiU33FCx9Qwi5iYE-w/formResponse';
+    const ENTRY_FROM   = 'entry.300227772';
+    const ENTRY_TO     = 'entry.1230807520';
+    const ENTRY_STATUS = 'entry.39347162';
+
+    // === State ===
+    let bookedRanges = [];
+    let requestedRanges = [];
+
+    // === Datumshilfen ===
+    function parseDate(str) {
+      const [y,m,d] = str.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    function formatLocal(date) {
+      const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+      return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    // === Status-Map aufbauen ===
+    const statusMap = {};
+    function rebuildStatus() {
+      Object.keys(statusMap).forEach(k => delete statusMap[k]);
+      // Belegt
+      bookedRanges.forEach(r => {
+        statusMap[r.from] = 'start';
+        const endDay = parseDate(r.to);
+        endDay.setDate(endDay.getDate() - 1);
+        statusMap[formatLocal(endDay)] = 'end';
+        let cur = parseDate(r.from);
+        cur.setDate(cur.getDate() + 1);
+        while (cur < endDay) {
+          statusMap[formatLocal(cur)] = 'inside';
+          cur.setDate(cur.getDate() + 1);
+        }
+      });
+      // Angefragt
+      requestedRanges.forEach(r => {
+        let cur = parseDate(r.from);
+        const endDay = parseDate(r.to);
+        while (cur <= endDay) {
+          statusMap[formatLocal(cur)] = 'requested';
+          cur.setDate(cur.getDate() + 1);
+        }
+      });
+    }
+
+    // === Kalender initialisieren ===
+    function initCalendar() {
+      rebuildStatus();
+      if (window.fp) window.fp.destroy();
+      window.fp = flatpickr("#dates", {
+        mode: "range",
+        minDate: "2025-04-01",
+        maxDate: "2025-10-31",
+        locale: "de",
+        dateFormat: "d.m.Y",
+        disable: [date => statusMap[formatLocal(date)] === 'inside'],
+        onDayCreate: (_,__,___,dayElem) => {
+          const iso = formatLocal(dayElem.dateObj);
+          const st = statusMap[iso] || 'free';
+          if (st === 'start')      dayElem.style.background = 'linear-gradient(to right, green 50%, red 50%)';
+          else if (st === 'end')   dayElem.style.background = 'linear-gradient(to right, red 50%, green 50%)';
+          else if (st === 'inside')dayElem.style.backgroundColor = 'red';
+          else if (st === 'requested') dayElem.style.backgroundColor = 'yellow';
+          else dayElem.style.backgroundColor = 'green';
+          Object.assign(dayElem.style, { borderRadius:'50%', color:'black', fontWeight:'bold' });
+        },
+        onClose: datesArr => {
+          if (datesArr.length === 2) {
+            const [s,e] = datesArr;
+            // Hauptsaison nur Sonntag–Sonntag
+            const highStart = parseDate('2025-06-22');
+            const highEnd   = parseDate('2025-08-23');
+            if (s >= highStart && e <= highEnd && (s.getDay() !== 0 || e.getDay() !== 0)) {
+              alert('In der Hauptsaison sind nur Buchungen von Sonntag bis Sonntag möglich.');
+              window.fp.clear();
+            }
+          }
+        }
+      });
+    }
+
+    // === Buchungsdaten laden ===
+    function loadBookings() {
+      return fetch(SHEET_CSV_URL)
+        .then(res => {
+          if (!res.ok) throw new Error('CSV-Fehler ' + res.status);
+          return res.text();
+        })
+        .then(txt => {
+          const lines = txt.trim().split('\n');
+          const data = lines.slice(1).map(line => line.split(',').map(c => c.trim()));
+          bookedRanges    = data.filter(r => r[2] === 'booked').map(r => ({ from: r[0], to: r[1] }));
+          requestedRanges = data.filter(r => r[2] === 'requested').map(r => ({ from: r[0], to: r[1] }));
+        });
+    }
+
+    // === Initialisierung ===
+    loadBookings()
+      .then(initCalendar)
+      .catch(err => { console.error('Lade-Fehler:', err); initCalendar(); });
+
+    // === Reset-Button ===
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      window.fp.clear();
+      document.getElementById('bookingForm').reset();
+    });
+
+    // === Formular absenden ===
+    document.getElementById('bookingForm').addEventListener('submit', function(evt) {
+      evt.preventDefault();
+      const fd = new FormData(this);
+      const [s,e] = window.fp.selectedDates;
+      const from = formatLocal(s), to = formatLocal(e);
+      const baseParams = {
+        renter_name:  fd.get('name'),
+        renter_email: fd.get('email'),
+        period:       fd.get('dates'),
+        adults:       fd.get('adults'),
+        children:     fd.get('children'),
+        notes:        fd.get('notes')
+      };
+      // Mail an Gast
+      emailjs.send(SERVICE_ID, TEMPLATE_GUEST, { ...baseParams, to_email: baseParams.renter_email })
+      // Mail an Host
+      emailjs.send(SERVICE_ID, TEMPLATE_HOST, { ...baseParams, to_email: HOST_EMAIL });
+      // In Sheet speichern via Google Forms
+      fetch(FORM_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          [ENTRY_FROM]:   from,
+          [ENTRY_TO]:     to,
+          [ENTRY_STATUS]: 'requested'
+        })
+      });
+      // Direkt markieren
+      requestedRanges.push({ from, to });
+      initCalendar();
+      alert('Anfrage gesendet und im Kalender gelb markiert!');
+      // Formular zurücksetzen (außer Datum)
+      ['name','email','notes'].forEach(n => document.querySelector(`[name="${n}"]`).value = '');
+      document.getElementById('adults').value = 2;
+      document.getElementById('children').value = 0;
+    });
+  </script>
+</body>
+</html>
