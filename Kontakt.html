@@ -14,14 +14,39 @@
     p { line-height: 1.6; margin-bottom: 1rem; }
     a.email { color: #0077aa; text-decoration: none; font-weight: bold; }
     a.email:hover { text-decoration: underline; }
+    .menu-toggle {
+      display: none;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      nav {
+        position: absolute;
+        top: 60px;    /* Höhe des Headers */
+        left: 0;
+        width: 100%;
+        background-color: rgba(0,0,0,0.8);
+        flex-direction: column;
+        display: none; /* Anfangs ausgeblendet */
+      }
+      nav a {
+        margin: 1rem 0;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
     <h2>Ferienhaus F344</h2>
+    <div class="menu-toggle">&#9776;</div>
     <nav>
       <a href="index.html">Start</a>
-      <a href="unterkunft.html">Unterkunft</a>
+      <a href="unterkunft.html">Unterkunft/Bilder</a>
       <a href="preise.html">Preise</a>
       <a href="buchung.html">Buchung</a>
       <a href="park.html">Park</a>
@@ -38,5 +63,12 @@
     <p><em>Bitte senden Sie Buchungsanfragen ausschließlich über die <a href="buchung.html">Buchungsseite</a>!</em></p>
     <p>Gerne nehme ich auch sonstige Anmerkungen entgegen, damit diese Website und unser Service stetig verbessert werden können.</p>
   </main>
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    toggle.addEventListener('click', () => {
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    });
+  </script>
 </body>
 </html>

@@ -2,64 +2,59 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Datenschutzerklärung – F344 Ferienhaus</title>
-  <link href="styles.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datenschutz – Ferienhaus F344</title>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 2rem;
-      background: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background-color: #008cba;
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
+    header { background: #008cba; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; margin-left: 1rem; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 600px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    h1 { color: #008cba; margin-top: 0; }
+    p { line-height: 1.6; margin-bottom: 1rem; }
+    a.email { color: #0077aa; text-decoration: none; font-weight: bold; }
+    a.email:hover { text-decoration: underline; }
+    .menu-toggle {
+      display: none;
+      font-size: 2rem;
       color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      cursor: pointer;
     }
-    nav a {
-      color: white;
-      margin-left: 1rem;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    main {
-      background: white;
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #008cba;
-    }
-    ul li {
-      margin-bottom: 0.5rem;
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      nav {
+        position: absolute;
+        top: 60px;    /* Höhe des Headers */
+        left: 0;
+        width: 100%;
+        background-color: rgba(0,0,0,0.8);
+        flex-direction: column;
+        display: none; /* Anfangs ausgeblendet */
+      }
+      nav a {
+        margin: 1rem 0;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
   <header>
+    <h2>Ferienhaus F344</h2>
+    <div class="menu-toggle">&#9776;</div>
     <nav>
       <a href="index.html">Startseite</a>
-      <a href="unterkunft.html">Unterkunft</a>
+      <a href="unterkunft.html">Unterkunft/Bilder</a>
       <a href="preise.html">Preise</a>
       <a href="buchung.html">Buchung</a>
       <a href="park.html">Park</a>
       <a href="kontakt.html">Kontakt</a>
       <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html" class="active">Datenschutz</a>
+      <a href="datenschutz.html">Datenschutz</a>
     </nav>
   </header>
-
   <main>
     <h1>Datenschutzerklärung</h1>
 
@@ -119,5 +114,12 @@
   <footer>
     <p>&copy; 2025 Alexander Mazko</p>
   </footer>
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    toggle.addEventListener('click', () => {
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    });
+  </script>
 </body>
 </html>
