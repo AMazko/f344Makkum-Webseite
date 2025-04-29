@@ -61,19 +61,36 @@ const ENTRY_TO = 'entry.1230807520';
 const ENTRY_STATUS = 'entry.39347162';
 let bookedRanges = [], requestedRanges = [];
 const statusMap = {};
-function parseDate(str) { const [y,m,d] = str.split('-').map(Number); return new Date(y, m-1, d); }
-function formatLocal(date) { const y = date.getFullYear(), m = date.getMonth()+1, d = date.getDate(); return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function parseDate(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+}
+function formatLocal(date) {
+  const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+  return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
 function rebuildStatus() {
   Object.keys(statusMap).forEach(k => delete statusMap[k]);
   bookedRanges.forEach(r => {
-    statusMap[r.from] = 'start';
-    const endDay = parseDate(r.to); endDay.setDate(endDay.getDate()-1);
-    let cur = parseDate(r.from); cur.setDate(cur.getDate()+1);
-    while (cur < endDay) { statusMap[formatLocal(cur)] = 'inside'; cur.setDate(cur.getDate()+1); }
+    const start = parseDate(r.from);
+    const end = parseDate(r.to);
+    statusMap[formatLocal(start)] = 'start';
+    let cur = new Date(start);
+    cur.setDate(cur.getDate() + 1);
+    while (cur < end) {
+      statusMap[formatLocal(cur)] = 'inside';
+      cur.setDate(cur.getDate() + 1);
+    }
+    statusMap[formatLocal(end)] = 'end';
   });
   requestedRanges.forEach(r => {
-    let cur = parseDate(r.from); const endDay = parseDate(r.to);
-    while (cur <= endDay) { statusMap[formatLocal(cur)] = 'requested'; cur.setDate(cur.getDate()+1); }
+    let cur = parseDate(r.from);
+    const endDay = parseDate(r.to);
+    while (cur <= endDay) {
+      statusMap[formatLocal(cur)] = 'requested';
+      cur.setDate(cur.getDate() + 1);
+    }
   });
 }
 function initCalendar() {
@@ -84,17 +101,17 @@ function initCalendar() {
     minDate: new Date(),
     maxDate: "2025-10-31",
     locale: "de",
+    showMonths: 1,
     dateFormat: "d.m.Y",
     disable: [
-      date => statusMap[formatLocal(date)] === 'inside' || statusMap[formatLocal(date)] === 'requested',
       date => {
         const today = new Date();
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        return date < monthStart || date > monthEnd;
+        if (date < today.setHours(0,0,0,0)) return true;
+        const status = statusMap[formatLocal(new Date(date))];
+        return status === 'inside';
       }
     ],
-    onDayCreate: (_,__,___,dayElem) => {
+    onDayCreate: (_, __, ___, dayElem) => {
       const iso = formatLocal(dayElem.dateObj);
       const st = statusMap[iso] || 'free';
       if (st === 'start') dayElem.style.background = 'linear-gradient(to right, green 50%, red 50%)';
@@ -102,7 +119,11 @@ function initCalendar() {
       else if (st === 'inside') dayElem.style.backgroundColor = 'red';
       else if (st === 'requested') dayElem.style.backgroundColor = 'yellow';
       else dayElem.style.backgroundColor = 'green';
-      Object.assign(dayElem.style, { borderRadius:'50%', color:'black', fontWeight:'bold' });
+      if (dayElem.classList.contains('prevMonthDay') || dayElem.classList.contains('nextMonthDay')) {
+        dayElem.style.opacity = '0.3';
+        dayElem.style.pointerEvents = 'none';
+      }
+      Object.assign(dayElem.style, { borderRadius: '50%', color: 'black', fontWeight: 'bold' });
     },
     onClose: datesArr => {
       if (datesArr.length === 2) {
@@ -139,6 +160,10 @@ document.getElementById('bookingForm').addEventListener('submit', function(evt) 
   const fd = new FormData(this);
   const [s,e] = window.fp.selectedDates;
   if (!s || !e) { alert('Bitte einen Zeitraum auswählen!'); return; }
+  const adults = parseInt(fd.get('adults'), 10) || 0;
+  const children = parseInt(fd.get('children'), 10) || 0;
+  if (adults + children > 5) { alert('Maximal 5 Personen erlaubt (Erwachsene + Kinder zusammen).'); return; }
+  if (adults > 4) { alert('Maximal 4 Erwachsene erlaubt.'); return; }
   const from = formatLocal(s), to = formatLocal(e);
   const baseParams = {
     renter_name:  fd.get('name'),
