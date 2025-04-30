@@ -1,290 +1,227 @@
-﻿<!DOCTYPE html>
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buchung – F344</title>
+  <!-- Flatpickr CSS -->
   <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+  <!-- Flatpickr JS + German locale -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js"></script>
+  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 0; }
     header { background: #008cba; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 3000; }
+    .menu-toggle { display: none; font-size: 2rem; color: white; cursor: pointer; }
+    nav { display: flex; }
     nav a { color: white; margin-left: 1rem; text-decoration: none; font-weight: bold; }
     nav a:hover { text-decoration: underline; }
-    .menu-toggle { display: none; font-size: 2rem; color: white; cursor: pointer; }
     @media (max-width: 768px) {
       .menu-toggle { display: block; }
-      nav {
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background-color: rgba(0,0,0,0.9);
-        flex-direction: column;
-        display: none;
-        z-index: 3500;
-      }
-      nav a { margin: 1rem 0; text-align: center; display: block; }
+      nav { position: absolute; top: 60px; left: 0; width: 100%; flex-direction: column; background-color: rgba(0,0,0,0.9); display: none; z-index: 3500; }
+      nav a { margin: 1rem 0; text-align: center; }
     }
-    h1 { text-align: center; margin-top: 2rem; }
-    form { background: white; padding: 2rem; max-width: 600px; margin: 2rem auto; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; margin: 2rem 0; }
+    form { background: white; padding: 2rem; max-width: 600px; margin: 0 auto 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     label { font-weight: bold; margin-top: 1rem; display: block; }
     input, select, textarea { width: 100%; padding: .5rem; margin-top: .5rem; border: 1px solid #ccc; border-radius: 4px; }
     .inline { display: flex; gap: 1rem; margin-bottom: 1rem; }
     .inline input { flex: 1; }
-    .reset-btn { background: #ccc; color: #333; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; display: block; margin-bottom: 1rem; }
+    .reset-btn { background: #ccc; color: #333; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; margin-bottom: 1rem; }
     button { background: #0077aa; color: white; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; width: 100%; margin-top: 1.5rem; }
     button:hover { background: #005f85; }
     .legend { margin-top: 1rem; text-align: center; }
     .legend span { margin: 0 1rem; display: inline-block; }
     .box { width: 12px; height: 12px; display: inline-block; margin-right: 5px; vertical-align: middle; }
-    .red { background: red; } .yellow { background: yellow; } .green { background: green; }
+    .red { background: red; }
+    .yellow { background: yellow; }
+    .green { background: green; }
   </style>
 </head>
 <body>
-<header>
-  <h2>Ferienhaus F344</h2>
-  <div class="menu-toggle">&#9776;</div>
-  <nav>
-    <a href="index.html">Start</a>
-    <a href="unterkunft.html">Unterkunft/Bilder</a>
-    <a href="preise.html">Preise</a>
-    <a href="buchung.html">Buchung</a>
-    <a href="park.html">Park</a>
-    <a href="kontakt.html">Kontakt</a>
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
-  </nav>
-</header>
-<h1>Buchungsanfrage Ferienhaus F344</h1>
-<form id="bookingForm">
-  <button type="button" class="reset-btn" id="resetBtn">Auswahl zurücksetzen</button>
-  <label for="dates">Zeitraum auswählen:</label>
-  <input id="dates" name="dates" readonly placeholder="Anreise bis Abreise">
-  <div class="legend">
-    <span><span class="box red"></span> Belegt</span>
-    <span><span class="box yellow"></span> Angefragt</span>
-    <span><span class="box green"></span> Frei</span>
-  </div>
-  <div class="inline">
-    <div><label for="adults">Erwachsene:</label><input type="number" id="adults" name="adults" min="1" value="2"></div>
-    <div><label for="children">Kinder:</label><input type="number" id="children" name="children" min="0" value="0"></div>
-  </div>
-  <label for="name">Name:</label>
-  <input type="text" name="name" required>
-  <label for="email">E-Mail:</label>
-  <input type="email" name="email" required>
-  <label for="notes">Anmerkungen:</label>
-  <textarea name="notes" rows="4"></textarea>
-  <button type="submit">Anfrage senden</button>
-</form>
-<script>
-  const toggle = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('nav');
-  toggle.addEventListener('click', () => {
-    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-  });
-</script>
-<!-- Der restliche Script-Code bleibt darunter erhalten -->
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buchung – F344</title>
-  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 2rem; }
-    h1 { text-align: center; }
-    form { background: white; padding: 2rem; max-width: 600px; margin: auto; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    label { font-weight: bold; margin-top: 1rem; display: block; }
-    input, select, textarea { width: 100%; padding: .5rem; margin-top: .5rem; border: 1px solid #ccc; border-radius: 4px; }
-    .inline { display: flex; gap: 1rem; margin-bottom: 1rem; }
-    .inline input { flex: 1; }
-    .reset-btn { background: #ccc; color: #333; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; display: block; margin-bottom: 1rem; }
-    button { background: #0077aa; color: white; border: none; border-radius: 5px; padding: .75rem; cursor: pointer; width: 100%; margin-top: 1.5rem; }
-    button:hover { background: #005f85; }
-    .legend { margin-top: 1rem; text-align: center; }
-    .legend span { margin: 0 1rem; display: inline-block; }
-    .box { width: 12px; height: 12px; display: inline-block; margin-right: 5px; vertical-align: middle; }
-    .red { background: red; } .yellow { background: yellow; } .green { background: green; }
-  </style>
-</head>
-<body>
-<h1>Buchungsanfrage Ferienhaus F344</h1>
-<form id="bookingForm">
-  <button type="button" class="reset-btn" id="resetBtn">Auswahl zurücksetzen</button>
-  <label for="dates">Zeitraum auswählen:</label>
-  <input id="dates" name="dates" readonly placeholder="Anreise bis Abreise">
-  <div class="legend">
-    <span><span class="box red"></span> Belegt</span>
-    <span><span class="box yellow"></span> Angefragt</span>
-    <span><span class="box green"></span> Frei</span>
-  </div>
-  <div class="inline">
-    <div><label for="adults">Erwachsene:</label><input type="number" id="adults" name="adults" min="1" value="2"></div>
-    <div><label for="children">Kinder:</label><input type="number" id="children" name="children" min="0" value="0"></div>
-  </div>
-  <label for="name">Name:</label>
-  <input type="text" name="name" required>
-  <label for="email">E-Mail:</label>
-  <input type="email" name="email" required>
-  <label for="notes">Anmerkungen:</label>
-  <textarea name="notes" rows="4"></textarea>
-  <button type="submit">Anfrage senden</button>
-</form>
-<script>
-emailjs.init("Yb22REbEP0fT4cT4z");
-const SERVICE_ID = "service_v7hpebh";
-const TEMPLATE_GUEST = "template_41a287w";
-const TEMPLATE_HOST = "template_tvyukq7";
-const HOST_EMAIL = "F344makkum@gmail.com";
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpCjiJzenS0a4dgX4liMhC5X5OylUgPl3ZHTB1PH8emjI8QO95kaHeef2B3DCK7lqJRZgddc7GNF1h/pub?gid=0&single=true&output=csv';
-const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScwMqt-8oddiQSou4MSV67-L2hZy0HHpiU33FCx9Qwi5iYE-w/formResponse';
-const ENTRY_FROM = 'entry.300227772';
-const ENTRY_TO = 'entry.1230807520';
-const ENTRY_STATUS = 'entry.39347162';
-let bookedRanges = [], requestedRanges = [];
-const statusMap = {};
-function parseDate(str) {
-  const [y, m, d] = str.split('-').map(Number);
-  const date = new Date(Date.UTC(y, m - 1, d));
-  return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-}
-function formatLocal(date) {
-  const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
-  return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-}
-function rebuildStatus() {
-  Object.keys(statusMap).forEach(k => delete statusMap[k]);
-  bookedRanges.forEach(r => {
-    const start = parseDate(r.from);
-    const end = parseDate(r.to);
-    statusMap[formatLocal(start)] = 'start';
-    let cur = new Date(start);
-    cur.setDate(cur.getDate() + 1);
-    while (cur < end) {
-      statusMap[formatLocal(cur)] = 'inside';
-      cur.setDate(cur.getDate() + 1);
-    }
-    statusMap[formatLocal(end)] = 'end';
-  });
-  requestedRanges.forEach(r => {
-    let cur = parseDate(r.from);
-    const endDay = parseDate(r.to);
-    while (cur <= endDay) {
-      statusMap[formatLocal(cur)] = 'requested';
-      cur.setDate(cur.getDate() + 1);
-    }
-  });
-}
-function initCalendar() {
-  rebuildStatus();
-  if (window.fp) window.fp.destroy();
-  window.fp = flatpickr("#dates", {
-    mode: "range",
-    minDate: new Date(),
-    maxDate: "2025-10-31",
-    locale: "de",
-    showMonths: 1,
-    dateFormat: "d.m.Y",
-    disable: [
-      date => {
-        const today = new Date();
-        if (date < today.setHours(0,0,0,0)) return true;
-        const status = statusMap[formatLocal(new Date(date))];
-        return status === 'inside';
-      }
-    ],
-    onDayCreate: (_, __, ___, dayElem) => {
-      const iso = formatLocal(dayElem.dateObj);
-      const st = statusMap[iso] || 'free';
-      if (st === 'start') dayElem.style.background = 'linear-gradient(to right, green 50%, red 50%)';
-      else if (st === 'end') dayElem.style.background = 'linear-gradient(to right, red 50%, green 50%)';
-      else if (st === 'inside') dayElem.style.backgroundColor = 'red';
-      else if (st === 'requested') dayElem.style.backgroundColor = 'yellow';
-      else dayElem.style.backgroundColor = 'green';
-      if (dayElem.classList.contains('prevMonthDay') || dayElem.classList.contains('nextMonthDay')) {
-        dayElem.style.opacity = '0.3';
-        dayElem.style.pointerEvents = 'none';
-      }
-      Object.assign(dayElem.style, { borderRadius: '50%', color: 'black', fontWeight: 'bold' });
-    },
-    onClose: datesArr => {
-      if (datesArr.length === 2) {
-        const [s,e] = datesArr;
-        const highStart = parseDate('2025-06-22');
-        const highEnd = parseDate('2025-08-23');
-        if (s >= highStart && e <= highEnd && (s.getDay() !== 0 || e.getDay() !== 0)) {
-          alert('In der Hauptsaison sind nur Buchungen von Sonntag bis Sonntag möglich.');
-          window.fp.clear();
-        }
-      }
-    }
-  });
-}
-function loadBookings() {
-  return fetch(SHEET_CSV_URL)
-    .then(res => { if (!res.ok) throw new Error('CSV-Fehler ' + res.status); return res.text(); })
-    .then(txt => {
-      const lines = txt.trim().split('\n');
-      const data = lines.slice(1).map(line => line.split(',').map(c => c.trim()));
-      bookedRanges = data.filter(r => r[2] === 'booked').map(r => ({ from: r[0], to: r[1] }));
-      requestedRanges = data.filter(r => r[2] === 'requested').map(r => ({ from: r[0], to: r[1] }));
+  <header>
+    <h2>Ferienhaus F344</h2>
+    <div class="menu-toggle">&#9776;</div>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="unterkunft.html">Unterkunft/Bilder</a>
+      <a href="preise.html">Preise</a>
+      <a href="buchung.html">Buchung</a>
+      <a href="park.html">Park</a>
+      <a href="kontakt.html">Kontakt</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+  </header>
+
+  <h1>Buchungsanfrage Ferienhaus F344</h1>
+  <form id="bookingForm">
+    <button type="button" class="reset-btn" id="resetBtn">Auswahl zurücksetzen</button>
+    <label for="dates">Zeitraum auswählen:</label>
+    <input id="dates" name="dates" readonly placeholder="Anreise bis Abreise">
+    <div class="legend">
+      <span><span class="box red"></span> Belegt</span>
+      <span><span class="box yellow"></span> Angefragt</span>
+      <span><span class="box green"></span> Frei</span>
+    </div>
+    <div class="inline">
+      <div>
+        <label for="adults">Erwachsene:</label>
+        <input type="number" id="adults" name="adults" min="1" max="4" value="2">
+      </div>
+      <div>
+        <label for="children">Kinder:</label>
+        <input type="number" id="children" name="children" min="0" max="3" value="0">
+      </div>
+    </div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" required>
+    <label for="email">E-Mail:</label>
+    <input type="email" name="email" required>
+    <label for="notes">Anmerkungen:</label>
+    <textarea name="notes" rows="4"></textarea>
+    <button type="submit">Anfrage senden</button>
+  </form>
+
+  <!-- Navigation Toggle Script -->
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    toggle.addEventListener('click', () => {
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
     });
-}
-loadBookings().then(initCalendar).catch(err => { console.error('Lade-Fehler:', err); initCalendar(); });
+  </script>
 
-document.getElementById('resetBtn').addEventListener('click', () => {
-  window.fp.clear();
-  document.getElementById('bookingForm').reset();
-});
+  <!-- Buchung JS: Flatpickr, Daten aus CSV, EmailJS -->
+  <script>
+    emailjs.init("Yb22REbEP0fT4cT4z");
+    const SERVICE_ID = "service_v7hpebh";
+    const TEMPLATE_GUEST = "template_41a287w";
+    const TEMPLATE_HOST = "template_tvyukq7";
+    const HOST_EMAIL = "F344makkum@gmail.com";
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpCjiJzenS0a4dgX4liMhC5X5OylUgPl3ZHTB1PH8emjI8QO95kaHeef2B3DCK7lqJRZgddc7GNF1h/pub?gid=0&single=true&output=csv';
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScwMqt-8oddiQSou4MSV67-L2hZy0HHpiU33FCx9Qwi5iYE-w/formResponse';
+    const ENTRY_FROM = 'entry.300227772';
+    const ENTRY_TO = 'entry.1230807520';
+    const ENTRY_STATUS = 'entry.39347162';
 
-document.getElementById('bookingForm').addEventListener('submit', function(evt) {
-  evt.preventDefault();
-  const fd = new FormData(this);
-  const [s,e] = window.fp.selectedDates;
-  if (!s || !e) { alert('Bitte einen Zeitraum auswählen!'); return; }
-  const adults = parseInt(fd.get('adults'), 10) || 0;
-  const children = parseInt(fd.get('children'), 10) || 0;
-  if (adults + children > 5) { alert('Maximal 5 Personen erlaubt (Erwachsene + Kinder zusammen).'); return; }
-  if (adults > 4) { alert('Maximal 4 Erwachsene erlaubt.'); return; }
-  const from = formatLocal(s), to = formatLocal(e);
-  const baseParams = {
-    renter_name:  fd.get('name'),
-    renter_email: fd.get('email'),
-    period:       fd.get('dates'),
-    adults:       fd.get('adults'),
-    children:     fd.get('children'),
-    notes:        fd.get('notes')
-  };
-  emailjs.send(SERVICE_ID, TEMPLATE_GUEST, { ...baseParams, to_email: baseParams.renter_email });
-  emailjs.send(SERVICE_ID, TEMPLATE_HOST, { ...baseParams, to_email: HOST_EMAIL });
-  fetch(FORM_URL, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ [ENTRY_FROM]: from, [ENTRY_TO]: to, [ENTRY_STATUS]: 'requested' })
-  });
-  requestedRanges.push({ from, to });
-  initCalendar();
-  alert('Anfrage gesendet und im Kalender gelb markiert!');
-  ['name','email','notes'].forEach(n => document.querySelector(`[name="${n}"]`).value = '');
-  document.getElementById('adults').value = 2;
-  document.getElementById('children').value = 0;
-});
+    let bookedRanges = [];
+    let requestedRanges = [];
+    const statusMap = {};
 
-document.getElementById('children').addEventListener('input', function() {
-  if (this.value > 3) this.value = 3;
-});
-document.getElementById('adults').addEventListener('input', function() {
-  if (this.value > 4) this.value = 4;
-});
-</script>
+    function parseDate(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      const utc = new Date(Date.UTC(y, m - 1, d));
+      return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+    }
+
+    function formatLocal(date) {
+      const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+      return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    function rebuildStatus() {
+      Object.keys(statusMap).forEach(k => delete statusMap[k]);
+      bookedRanges.forEach(r => {
+        const start = parseDate(r.from);
+        const end = parseDate(r.to);
+        statusMap[formatLocal(start)] = 'start';
+        let cur = new Date(start);
+        cur.setDate(cur.getDate() + 1);
+        while (cur < end) {
+          statusMap[formatLocal(cur)] = 'inside';
+          cur.setDate(cur.getDate() + 1);
+        }
+        statusMap[formatLocal(end)] = 'end';
+      });
+      requestedRanges.forEach(r => {
+        let cur = parseDate(r.from);
+        const endDay = parseDate(r.to);
+        while (cur <= endDay) {
+          statusMap[formatLocal(cur)] = 'requested';
+          cur.setDate(cur.getDate() + 1);
+        }
+      });
+    }
+
+    function initCalendar() {
+      rebuildStatus();
+      if (window.fp) window.fp.destroy();
+      window.fp = flatpickr("#dates", {
+        mode: "range",
+        minDate: new Date(),
+        maxDate: "2025-10-31",
+        locale: "de",
+        showMonths: 1,
+        dateFormat: "d.m.Y",
+        disable: [date => {
+          const today = new Date();
+          if (date < today.setHours(0,0,0,0)) return true;
+          const status = statusMap[formatLocal(date)];
+          return status === 'inside';
+        }],
+        onDayCreate: (_, __, ___, dayElem) => {
+          const iso = formatLocal(dayElem.dateObj);
+          const st = statusMap[iso] || 'free';
+          if (st === 'start') dayElem.style.background = 'linear-gradient(to right, green 50%, red 50%)';
+          else if (st === 'end') dayElem.style.background = 'linear-gradient(to right, red 50%, green 50%)';
+          else if (st === 'inside') dayElem.style.backgroundColor = 'red';
+          else if (st === 'requested') dayElem.style.backgroundColor = 'yellow';
+          else dayElem.style.backgroundColor = 'green';
+          if (dayElem.classList.contains('prevMonthDay') || dayElem.classList.contains('nextMonthDay')) {
+            dayElem.style.opacity = '0.3';
+            dayElem.style.pointerEvents = 'none';
+          }
+          Object.assign(dayElem.style, { borderRadius: '50%', color: 'black', fontWeight: 'bold' });
+        }
+      });
+    }
+
+    function loadBookings() {
+      return fetch(SHEET_CSV_URL)
+        .then(res => res.ok ? res.text() : Promise.reject('CSV-Fehler ' + res.status))
+        .then(txt => {
+          const lines = txt.trim().split('\n');
+          const data = lines.slice(1).map(line => line.split(',').map(c => c.trim()));
+          bookedRanges = data.filter(r => r[2] === 'booked').map(r => ({ from: r[0], to: r[1] }));
+          requestedRanges = data.filter(r => r[2] === 'requested').map(r => ({ from: r[0], to: r[1] }));
+        });
+    }
+
+    // Initialisierung
+    loadBookings().then(initCalendar).catch(() => initCalendar());
+
+    // Reset-Button
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      window.fp.clear();
+      document.getElementById('bookingForm').reset();
+    });
+
+    // Formular absenden
+    document.getElementById('bookingForm').addEventListener('submit', function(evt) {
+      evt.preventDefault();
+      const fd = new FormData(this);
+      const [s,e] = window.fp.selectedDates;
+      if (!s || !e) { alert('Bitte Zeitraum auswählen!'); return; }
+      const adults = parseInt(fd.get('adults'), 10) || 0;
+      const children = parseInt(fd.get('children'), 10) || 0;
+      if (adults + children > 5) { alert('Maximal 5 Personen (Erwachsene+Kinder)'); return; }
+      if (adults > 4) { alert('Maximal 4 Erwachsene'); return; }
+      const from = formatLocal(s), to = formatLocal(e);
+      const baseParams = { renter_name: fd.get('name'), renter_email: fd.get('email'), period: fd.get('dates'), adults: fd.get('adults'), children: fd.get('children'), notes: fd.get('notes') };
+      emailjs.send(SERVICE_ID, TEMPLATE_GUEST, { ...baseParams, to_email: baseParams.renter_email });
+      emailjs.send(SERVICE_ID, TEMPLATE_HOST, { ...baseParams, to_email: HOST_EMAIL });
+      fetch(FORM_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ [ENTRY_FROM]: from, [ENTRY_TO]: to, [ENTRY_STATUS]: 'requested' }) });
+      requestedRanges.push({ from, to }); initCalendar();
+      alert('Anfrage gesendet!');
+      this.reset(); document.getElementById('adults').value=2; document.getElementById('children').value=0;
+    });
+
+    // Input-Limits
+    document.getElementById('children').addEventListener('input', function() { if (this.value>3) this.value=3; });
+    document.getElementById('adults').addEventListener('input', function() { if (this.value>4) this.value=4; });
+  </script>
 </body>
 </html>

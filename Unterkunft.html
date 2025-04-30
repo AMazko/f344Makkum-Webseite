@@ -64,27 +64,47 @@
     <h1>Unterkunft</h1>
     <div class="swiper mySwiper">
       <div class="swiper-wrapper">
+        <!-- Außen & Lage -->
         <div class="swiper-slide"><img src="images/Aussenansicht.jpg" alt="Außenansicht"></div>
-        <div class="swiper-slide"><img src="images/Stegterasse.jpg" alt="Stegterrasse"></div>
-        <div class="swiper-slide"><img src="images/Wohnzimmer1.jpg" alt="Wohnzimmer 1"></div>
-        <div class="swiper-slide"><img src="images/Wohnzimmer2.jpg" alt="Wohnzimmer 2"></div>
-        <div class="swiper-slide"><img src="images/Schlafzimmer_Eltern.jpg" alt="Schlafzimmer Eltern"></div>
-        <div class="swiper-slide"><img src="images/Schlafzimmer_Kinder.jpg" alt="Schlafzimmer Kinder"></div>
-        <div class="swiper-slide"><img src="images/KuecheundEsszimmer.jpg" alt="Küche und Esszimmer"></div>
-        <div class="swiper-slide"><img src="images/Bad.jpg" alt="Badezimmer"></div>
-        <div class="swiper-slide"><img src="images/Pirateninsel.jpg" alt="Blick auf Pirateninsel"></div>
+        <div class="swiper-slide"><img src="images/Googleearth.jpg" alt="Lageplan (Google Earth)"></div>
+        <!-- Eingang -->
+        <div class="swiper-slide"><img src="images/Eingang.JPEG" alt="Eingangsbereich"></div>
+        <!-- Outdoor & Freizeit -->
+        <div class="swiper-slide"><img src="images/Steg.JPEG" alt="Steg"></div>
+        <div class="swiper-slide"><img src="images/SUP.JPEG" alt="SUP Board"></div>
+        <div class="swiper-slide"><img src="images/Pirateninsel.jpg" alt="Blick auf die Pirateninsel"></div>
+        <div class="swiper-slide"><img src="images/Fahrrad.JPEG" alt="Fahrräder"></div>
+        <!-- Wohnbereich -->
+        <div class="swiper-slide"><img src="images/Ofen.JPEG" alt="Pelletofen"></div>
+        <div class="swiper-slide"><img src="images/Kueche.JPEG" alt="Küche"></div>
+        <div class="swiper-slide"><img src="images/Kueche_WZ.JPEG" alt="Küche und Wohnbereich"></div>
+        <div class="swiper-slide"><img src="images/WZ_Vorne.JPEG" alt="Wohnzimmer (Vorne)"></div>
+        <div class="swiper-slide"><img src="images/WZ_Schraeg.JPEG" alt="Wohnzimmer (Schräg)"></div>
+        <div class="swiper-slide"><img src="images/Sofa.JPEG" alt="Schlafsofa"></div>
+        <!-- Schlafzimmer Eltern -->
+        <div class="swiper-slide"><img src="images/Eltern1.JPEG" alt="Schlafzimmer Eltern"></div>
+        <div class="swiper-slide"><img src="images/Elternrein.JPEG" alt="Schlafzimmer Eltern (Eingangsbereich)"></div>
+        <!-- Schlafzimmer Kinder -->
+        <div class="swiper-slide"><img src="images/Kindbett.JPEG" alt="Hochbett Kinder"></div>
+        <div class="swiper-slide"><img src="images/Kindrein.JPEG" alt="Schlafzimmer Kinder (Eingang)"></div>
+        <div class="swiper-slide"><img src="images/Kindraus.JPEG" alt="Schlafzimmer Kinder (Blick)"></div>
+        <!-- Badezimmer -->
+        <div class="swiper-slide"><img src="images/Bad1.JPEG" alt="Badezimmer 1"></div>
+        <div class="swiper-slide"><img src="images/Bad2.JPEG" alt="Badezimmer 2"></div>
       </div>
       <div class="swiper-button-next"></div>
       <div class="swiper-button-prev"></div>
       <div class="swiper-pagination"></div>
     </div>
+
     <div class="lightbox-overlay" id="lightboxOverlay">
       <span class="close-btn" id="lightboxClose">&times;</span>
       <img id="lightboxImage" src="#" alt="">
     </div>
+
     <dl>
       <dt>Maximale Personenanzahl</dt><dd>2 Erwachsene, 3 Kinder</dd>
-      <dt>Schlafzimmer & Betten</dt><dd>Schlafzimmer 1: Hochbett (140 cm unten, 90 cm oben), Schlafzimmer: 1 Hochbett 90 cm Wohnzimmer: Schlafsofa</dd>
+      <dt>Schlafzimmer & Betten</dt><dd>Elternzimmer: Doppelbett; Kinderzimmer: Hochbett, Schlafsofa im Wohnzimmer</dd>
       <dt>WLAN</dt><dd>Kein WLAN (Park-WLAN optional buchbar)</dd>
       <dt>Küche</dt><dd>Gasherd, Kühlschrank mit Gefrierfach, Mini-Backofen, Toaster, Kaffeemaschine, Wasserkocher</dd>
       <dt>Spülmaschine</dt><dd>Nein</dd>
@@ -105,6 +125,7 @@
       <dt>Stornierungsbedingungen</dt><dd>Bis 2 Wochen vor Anreise kostenfrei, danach 50 %</dd>
     </dl>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
   <script>
     const swiper = new Swiper('.mySwiper', {
@@ -131,8 +152,6 @@
         lightboxOverlay.style.display = 'none';
       }
     });
-  </script>
-  <script>
     const toggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('nav');
     toggle.addEventListener('click', () => {

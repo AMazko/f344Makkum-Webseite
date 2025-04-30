@@ -38,8 +38,11 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1 {
+    h1, h2 {
       color: #008cba;
+    }
+    ul {
+      padding-left: 1.2rem;
     }
     ul li {
       margin-bottom: 0.5rem;
@@ -56,12 +59,12 @@
       }
       nav {
         position: absolute;
-        top: 60px;    /* Höhe des Headers */
+        top: 60px;
         left: 0;
         width: 100%;
         background-color: rgba(0,0,0,0.8);
         flex-direction: column;
-        display: none; /* Anfangs ausgeblendet */
+        display: none;
       }
       nav a {
         margin: 1rem 0;
@@ -72,7 +75,7 @@
 </head>
 <body>
   <header>
-    <h1>Preise & Buchung</h1>
+    <h1>Preise &amp; Buchung</h1>
     <div class="menu-toggle">&#9776;</div>
     <nav>
       <a href="index.html">Start</a>
@@ -80,33 +83,56 @@
       <a href="preise.html">Preise</a>
       <a href="buchung.html">Buchung</a>
       <a href="park.html">Park</a>
-      <a href="makkum.html">Makkum</a>
       <a href="kontakt.html">Kontakt</a>
       <a href="impressum.html">Impressum</a>
       <a href="datenschutz.html">Datenschutz</a>
     </nav>
   </header>
+
   <main>
     <h2>Buchungszeitraum</h2>
-    <p>Das Ferienhaus kann nur im Zeitraum vom <strong>01. April bis 31. Oktober</strong> gebucht werden.</p>
+    <p>Unser Ferienhaus steht im Zeitraum <strong>1. April bis 31. Oktober</strong> zur Verfügung.</p>
 
     <h2>Saisonzeiten</h2>
     <ul>
       <li><strong>Nebensaison:</strong> 01.04.2025 – 22.06.2025 und 25.08.2025 – 31.10.2025</li>
-      <li><strong>Hauptsaison:</strong> 22.06.2025 – 24.08.2025 (nur von Sonntag 15:00 Uhr bis Sonntag 10:30 Uhr buchbar)</li>
+      <li><strong>Hauptsaison:</strong> 22.06.2025 – 24.08.2025  
+        <br><small>(An- und Abreise nur Sonntag bis Sonntag, 15:00–10:30 Uhr)</small>
+      </li>
     </ul>
 
     <h2>Preise</h2>
     <ul>
-      <li><strong>Nebensaison:</strong> 65 € / Nacht</li>
-      <li><strong>Hauptsaison:</strong> 85 € / Nacht</li>
+      <li><strong>Nebensaison:</strong> 65 € pro Nacht</li>
+      <li><strong>Hauptsaison:</strong> 85 € pro Nacht</li>
       <li><strong>Endreinigung:</strong> 45 € (einmalig)</li>
-      <li><strong>Kaution:</strong> 100 € (wird nach Abreise erstattet)</li>
+      <li><strong>Kaution:</strong> 100 € (erfolgt Rückerstattung nach Abreise)</li>
     </ul>
 
-    <h2>Buchungsbedingungen</h2>
-    <strong>Die Buchung ist erst verbindlich, wenn die Zahlung inkl. Kaution innerhalb von 7 Tagen nach Kontakt erfolgt. Ansonsten wird der Zeitraum wieder freigegeben.</strong>
+    <h2>Zahlungsbedingungen</h2>
+    <p>Nach Buchung und Freigabe für den Zeitraum via Mail sind 50 % des Gesamtbetrags innerhalb von 14 Tagen zu überweisen. Den Rest begleichen Sie bitte spätestens vier Wochen vor Mietbeginn auf das in Ihrer Rechnung angegebene Konto oder via PayPal</p>
+
+    <h2>Campinggebühren</h2>
+    <p>Die Campingpauschale deckt die Nutzung aller Anlagen, des Freizeitprogramms, des Streichelzoos und den Strandservice ab. Die Gebühren sind separat an der Rezeption zu entrichten und nicht im Mietpreis inbegriffen.</p>
+    <ul>
+      <li><strong>Kinder unter 3 Jahren:</strong> kostenfrei</li>
+      <li><strong>Ab 3 Jahren:</strong>
+        <ul>
+          <li>März, April, September, Oktober: 4,00 € / Person / Nacht</li>
+          <li>Mai &amp; Juni: 4,50 € / Person / Nacht</li>
+          <li>Juli &amp; August: 5,00 € / Person / Nacht</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>Allgemeine Hinweise</h2>
+    <ul>
+      <li>Bitte bringen Sie eigene Bettwäsche, Badetücher, Handtücher und Küchentücher mit.</li>
+      <li>Es ist nur ein Pkw-Stellplatz inklusive.</li>
+      <li>Eine Aufladung von Elektrofahrzeugen am Häuschen ist nicht gestattet. Ladestationen finden Sie auf den Parkplätzen des Hotels und des Beach Resorts.</li>
+    </ul>
   </main>
+
   <script>
     const toggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('nav');
