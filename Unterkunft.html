@@ -18,6 +18,8 @@
     dt { font-weight: bold; }
     dd { margin: 0 0 1rem 0; }
     @media (max-width: 600px) { dl { grid-template-columns: 1fr; } }
+
+    /* Lightbox-Grundstyles */
     .lightbox-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center;
@@ -27,6 +29,22 @@
     .lightbox-overlay .close-btn {
       position: absolute; top: 20px; right: 20px; font-size: 2rem; color: white; cursor: pointer;
     }
+
+    /* Neue Navigationspfeile */
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      z-index: 4100;
+      padding: 0 1rem;
+    }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+
     .menu-toggle { display: none; font-size: 2rem; color: white; cursor: pointer; }
     @media (max-width: 768px) {
       .menu-toggle { display: block; }
@@ -59,6 +77,7 @@
       <a href="datenschutz.html">Datenschutz</a>
     </nav>
   </header>
+
   <main>
     <h1>Unterkunft</h1>
     <div class="swiper mySwiper">
@@ -96,14 +115,17 @@
       <div class="swiper-pagination"></div>
     </div>
 
+    <!-- Lightbox Overlay mit Navigation -->
     <div class="lightbox-overlay" id="lightboxOverlay">
+      <span class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</span>
       <span class="close-btn" id="lightboxClose">&times;</span>
       <img id="lightboxImage" src="#" alt="">
+      <span class="lightbox-nav lightbox-next" id="lightboxNext">›</span>
     </div>
 
     <dl>
       <dt>Maximale Personenanzahl</dt><dd>2 Erwachsene, 3 Kinder</dd>
-      <dt>Schlafzimmer & Betten</dt><dd>Elternzimmer: Doppelbett; Kinderzimmer: Hochbett, Schlafsofa im Wohnzimmer</dd>
+      <dt>Schlafzimmer &amp; Betten</dt><dd>Elternzimmer: Doppelbett; Kinderzimmer: Hochbett, Schlafsofa im Wohnzimmer</dd>
       <dt>WLAN</dt><dd>Kein WLAN (Park-WLAN optional buchbar)</dd>
       <dt>Küche</dt><dd>Gasherd, Kühlschrank mit Gefrierfach, Mini-Backofen, Toaster, Kaffeemaschine, Wasserkocher</dd>
       <dt>Spülmaschine</dt><dd>Nein</dd>
@@ -119,7 +141,7 @@
       <dt>Haustiere erlaubt?</dt><dd>Nein</dd>
       <dt>Bettzeug</dt><dd>Nein</dd>
       <dt>Rauchen</dt><dd>Nein</dd>
-      <dt>Grill & Terrasse</dt><dd>Kohlegrill und Terrassenausstattung vorhanden</dd>
+      <dt>Grill &amp; Terrasse</dt><dd>Kohlegrill und Terrassenausstattung vorhanden</dd>
       <dt>Check-in / Check-out</dt><dd>Anreise ab 15:00 Uhr, Abreise bis 10:00 Uhr</dd>
       <dt>Mindestaufenthalt</dt><dd>Hauptsaison: Sonntag bis Sonntag, Nebensaison: ab 2 Nächten</dd>
       <dt>Stornierungsbedingungen</dt><dd>Bis 2 Wochen vor Anreise kostenfrei, danach 50 %</dd>
@@ -128,30 +150,56 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
   <script>
+    // Swiper-Initialisierung (unverändert) :contentReference[oaicite:1]{index=1}:contentReference[oaicite:2]{index=2}
     const swiper = new Swiper('.mySwiper', {
       loop: true,
       pagination: { el: '.swiper-pagination', clickable: true },
       navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       autoplay: { delay: 5000 }
     });
+
+    // Lightbox mit Vor-/Zurück-Navigation
+    const slides = Array.from(document.querySelectorAll('.swiper-slide img'));
     const lightboxOverlay = document.getElementById('lightboxOverlay');
     const lightboxImage = document.getElementById('lightboxImage');
     const lightboxClose = document.getElementById('lightboxClose');
-    document.querySelectorAll('.swiper-slide img').forEach(img => {
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+    let currentIndex = 0;
+
+    slides.forEach((img, idx) => {
       img.addEventListener('click', () => {
-        lightboxImage.src = img.src;
-        lightboxImage.alt = img.alt;
-        lightboxOverlay.style.display = 'flex';
+        currentIndex = idx;
+        showLightbox();
       });
     });
+
+    function showLightbox() {
+      const img = slides[currentIndex];
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt;
+      lightboxOverlay.style.display = 'flex';
+    }
+
     lightboxClose.addEventListener('click', () => {
       lightboxOverlay.style.display = 'none';
     });
     lightboxOverlay.addEventListener('click', e => {
-      if (e.target === lightboxOverlay) {
-        lightboxOverlay.style.display = 'none';
-      }
+      if (e.target === lightboxOverlay) lightboxOverlay.style.display = 'none';
     });
+
+    prevBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      showLightbox();
+    });
+    nextBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      currentIndex = (currentIndex + 1) % slides.length;
+      showLightbox();
+    });
+
+    // Mobile-Nav Toggle (unverändert) :contentReference[oaicite:3]{index=3}:contentReference[oaicite:4]{index=4}
     const toggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('nav');
     toggle.addEventListener('click', () => {

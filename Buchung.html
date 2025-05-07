@@ -4,12 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buchung – F344</title>
-  <!-- Flatpickr CSS -->
   <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
-  <!-- Flatpickr JS + German locale -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.js"></script>
-  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 0; }
@@ -38,7 +35,26 @@
     .red { background: red; }
     .yellow { background: yellow; }
     .green { background: green; }
-  </style>
+  .info-box {
+  background: #fff7d9;
+  border: 1px solid #e0c97f;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+.info-box h3 {
+  margin-top: 0;
+  color: #b38200;
+}
+.info-box ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.info-box li {
+  margin-bottom: 0.5rem;
+}
+</style>
 </head>
 <body>
   <header>
@@ -57,35 +73,51 @@
   </header>
 
   <h1>Buchungsanfrage Ferienhaus F344</h1>
-  <form id="bookingForm">
-    <button type="button" class="reset-btn" id="resetBtn">Auswahl zurücksetzen</button>
-    <label for="dates">Zeitraum auswählen:</label>
-    <input id="dates" name="dates" readonly placeholder="Anreise bis Abreise">
-    <div class="legend">
-      <span><span class="box red"></span> Belegt</span>
-      <span><span class="box yellow"></span> Angefragt</span>
-      <span><span class="box green"></span> Frei</span>
-    </div>
-    <div class="inline">
-      <div>
-        <label for="adults">Erwachsene:</label>
-        <input type="number" id="adults" name="adults" min="1" max="4" value="2">
-      </div>
-      <div>
-        <label for="children">Kinder:</label>
-        <input type="number" id="children" name="children" min="0" max="3" value="0">
-      </div>
-    </div>
-    <label for="name">Name:</label>
-    <input type="text" name="name" required>
-    <label for="email">E-Mail:</label>
-    <input type="email" name="email" required>
-    <label for="notes">Anmerkungen:</label>
-    <textarea name="notes" rows="4"></textarea>
-    <button type="submit">Anfrage senden</button>
-  </form>
+    <form id="bookingForm">
+  <button type="button" class="reset-btn" id="resetBtn">Auswahl zurücksetzen</button>
+  <label for="dates">Zeitraum auswählen:</label>
+  <input id="dates" name="dates" readonly placeholder="Anreise bis Abreise">
 
-  <!-- Navigation Toggle Script -->
+  <div class="info-box">
+    <h3>Hinweise zur Buchung</h3>
+    <ul>
+      <li>In der <strong>Hauptsaison (29.06. – 24.08.)</strong> sind nur Buchungen von <strong>Sonntag bis Sonntag</strong> möglich.</li>
+      <li>Der <strong>mindeste Aufenthalt</strong> beträgt <strong>3 Tage</strong> (Anreise, ganzer Tag, Abreise).</li>
+      <li>Es müssen <strong>mindestens 1 Erwachsener</strong> angegeben werden.</li>
+      <li>Maximal sind <strong>5 Personen insgesamt</strong> erlaubt (Erwachsene + Kinder).</li>
+      <li>Nach dem "<strong>Anfrage senden"</strong> wird sollte eine Anfragebestätigung an Ihre angegebene E-Mail gesendet werden.</li>
+    </ul>
+  </div>
+
+  <div class="legend">
+    <span><span class="box red"></span> Belegt</span>
+    <span><span class="box yellow"></span> Angefragt</span>
+    <span><span class="box green"></span> Frei</span>
+  </div>
+
+  <div class="inline">
+    <div>
+      <label for="adults">Erwachsene:</label>
+      <input type="number" id="adults" name="adults" min="1" max="4" value="2">
+    </div>
+    <div>
+      <label for="children">Kinder:</label>
+      <input type="number" id="children" name="children" min="0" max="3" value="0">
+    </div>
+  </div>
+
+  <label for="name">Name:</label>
+  <input type="text" name="name" required>
+
+  <label for="email">E-Mail:</label>
+  <input type="email" name="email" required>
+
+  <label for="notes">Anmerkungen:</label>
+  <textarea name="notes" rows="4"></textarea>
+
+  <button type="submit">Anfrage senden</button>
+</form>
+
   <script>
     const toggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('nav');
@@ -94,134 +126,201 @@
     });
   </script>
 
-  <!-- Buchung JS: Flatpickr, Daten aus CSV, EmailJS -->
+  <!-- JavaScript mit gewünschter Farb- und Sperrlogik folgt im nächsten Schritt -->
   <script>
-    emailjs.init("Yb22REbEP0fT4cT4z");
-    const SERVICE_ID = "service_v7hpebh";
-    const TEMPLATE_GUEST = "template_41a287w";
-    const TEMPLATE_HOST = "template_tvyukq7";
-    const HOST_EMAIL = "F344makkum@gmail.com";
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpCjiJzenS0a4dgX4liMhC5X5OylUgPl3ZHTB1PH8emjI8QO95kaHeef2B3DCK7lqJRZgddc7GNF1h/pub?gid=0&single=true&output=csv';
-    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScwMqt-8oddiQSou4MSV67-L2hZy0HHpiU33FCx9Qwi5iYE-w/formResponse';
-    const ENTRY_FROM = 'entry.300227772';
-    const ENTRY_TO = 'entry.1230807520';
-    const ENTRY_STATUS = 'entry.39347162';
+  emailjs.init("Yb22REbEP0fT4cT4z");
+  const SERVICE_ID = "service_v7hpebh";
+  const TEMPLATE_GUEST = "template_41a287w";
+  const TEMPLATE_HOST = "template_tvyukq7";
+  const HOST_EMAIL = "F344makkum@gmail.com";
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpCjiJzenS0a4dgX4liMhC5X5OylUgPl3ZHTB1PH8emjI8QO95kaHeef2B3DCK7lqJRZgddc7GNF1h/pub?gid=0&single=true&output=csv';
 
-    let bookedRanges = [];
-    let requestedRanges = [];
-    const statusMap = {};
+  let bookedRanges = [], requestedRanges = [], statusMap = {};
 
-    function parseDate(str) {
-      const [y, m, d] = str.split('-').map(Number);
-      const utc = new Date(Date.UTC(y, m - 1, d));
-      return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
-    }
+  function parseDate(str) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
 
-    function formatLocal(date) {
-      const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
-      return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    }
+  function formatLocal(date) {
+    const y = date.getFullYear(), m = String(date.getMonth() + 1).padStart(2, '0'), d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 
-    function rebuildStatus() {
-      Object.keys(statusMap).forEach(k => delete statusMap[k]);
-      bookedRanges.forEach(r => {
-        const start = parseDate(r.from);
-        const end = parseDate(r.to);
-        statusMap[formatLocal(start)] = 'start';
-        let cur = new Date(start);
+  function rebuildStatus() {
+    statusMap = {};
+    bookedRanges.forEach(r => {
+      const start = parseDate(r.from), end = parseDate(r.to);
+      statusMap[formatLocal(start)] = 'start';
+      let cur = new Date(start); cur.setDate(cur.getDate() + 1);
+      while (cur < end) {
+        statusMap[formatLocal(cur)] = 'inside';
         cur.setDate(cur.getDate() + 1);
-        while (cur < end) {
-          statusMap[formatLocal(cur)] = 'inside';
-          cur.setDate(cur.getDate() + 1);
-        }
-        statusMap[formatLocal(end)] = 'end';
-      });
-      requestedRanges.forEach(r => {
-        let cur = parseDate(r.from);
-        const endDay = parseDate(r.to);
-        while (cur <= endDay) {
-          statusMap[formatLocal(cur)] = 'requested';
-          cur.setDate(cur.getDate() + 1);
-        }
-      });
-    }
+      }
+      statusMap[formatLocal(end)] = 'end';
+    });
+    requestedRanges.forEach(r => {
+      const start = parseDate(r.from), end = parseDate(r.to);
+      const sk = formatLocal(start);
+      if (!statusMap[sk]) statusMap[sk] = 'requested_start';
+      else if (["start", "inside", "end"].includes(statusMap[sk])) statusMap[sk] = 'booked_requested_start';
+      let cur = new Date(start); cur.setDate(cur.getDate() + 1);
+      while (cur < end) {
+        const key = formatLocal(cur);
+        if (!statusMap[key]) statusMap[key] = 'requested_inside';
+        cur.setDate(cur.getDate() + 1);
+      }
+      const ek = formatLocal(end);
+      if (!statusMap[ek]) statusMap[ek] = 'requested_end';
+      else if (["start", "inside", "end"].includes(statusMap[ek])) statusMap[ek] = 'booked_requested_end';
+    });
+  }
 
-    function initCalendar() {
-      rebuildStatus();
-      if (window.fp) window.fp.destroy();
-      window.fp = flatpickr("#dates", {
-        mode: "range",
-        minDate: new Date(),
-        maxDate: "2025-10-31",
-        locale: "de",
-        showMonths: 1,
-        dateFormat: "d.m.Y",
-        disable: [date => {
-          const today = new Date();
-          if (date < today.setHours(0,0,0,0)) return true;
-          const status = statusMap[formatLocal(date)];
-          return status === 'inside';
-        }],
-        onDayCreate: (_, __, ___, dayElem) => {
-          const iso = formatLocal(dayElem.dateObj);
-          const st = statusMap[iso] || 'free';
-          if (st === 'start') dayElem.style.background = 'linear-gradient(to right, green 50%, red 50%)';
-          else if (st === 'end') dayElem.style.background = 'linear-gradient(to right, red 50%, green 50%)';
-          else if (st === 'inside') dayElem.style.backgroundColor = 'red';
-          else if (st === 'requested') dayElem.style.backgroundColor = 'yellow';
-          else dayElem.style.backgroundColor = 'green';
-          if (dayElem.classList.contains('prevMonthDay') || dayElem.classList.contains('nextMonthDay')) {
-            dayElem.style.opacity = '0.3';
-            dayElem.style.pointerEvents = 'none';
-          }
-          Object.assign(dayElem.style, { borderRadius: '50%', color: 'black', fontWeight: 'bold' });
+  function initCalendar() {
+    rebuildStatus();
+    if (window.fp) window.fp.destroy();
+    window.fp = flatpickr("#dates", {
+      mode: "range",
+      minDate: new Date(),
+      maxDate: "2025-10-31",
+      locale: "de",
+      showMonths: 1,
+      dateFormat: "d.m.Y",
+      disable: [
+        date => {
+          const today = new Date().setHours(0, 0, 0, 0);
+          const key = formatLocal(date);
+          const st = statusMap[key];
+          return date < today || ['inside', 'requested_inside', 'booked_requested_start', 'booked_requested_end'].includes(st);
         }
-      });
-    }
+      ],
+      onDayCreate: (_, __, ___, dayElem) => {
+        const iso = formatLocal(dayElem.dateObj);
+        const st = statusMap[iso] || 'free';
 
-    function loadBookings() {
-      return fetch(SHEET_CSV_URL)
-        .then(res => res.ok ? res.text() : Promise.reject('CSV-Fehler ' + res.status))
-        .then(txt => {
-          const lines = txt.trim().split('\n');
-          const data = lines.slice(1).map(line => line.split(',').map(c => c.trim()));
-          bookedRanges = data.filter(r => r[2] === 'booked').map(r => ({ from: r[0], to: r[1] }));
-          requestedRanges = data.filter(r => r[2] === 'requested').map(r => ({ from: r[0], to: r[1] }));
+        if (st === 'free') dayElem.style.backgroundColor = 'green';
+        else if (st === 'inside') dayElem.style.backgroundColor = 'red';
+        else if (st === 'requested_inside') dayElem.style.backgroundColor = 'yellow';
+        else if (st === 'start') dayElem.style.background = 'linear-gradient(to right, green 50%, red 50%)';
+        else if (st === 'end') dayElem.style.background = 'linear-gradient(to right, red 50%, green 50%)';
+        else if (st === 'requested_start') dayElem.style.background = 'linear-gradient(to right, green 50%, yellow 50%)';
+        else if (st === 'requested_end') dayElem.style.background = 'linear-gradient(to right, yellow 50%, green 50%)';
+        else if (st === 'booked_requested_start') dayElem.style.background = 'linear-gradient(to right, red 50%, yellow 50%)';
+        else if (st === 'booked_requested_end') dayElem.style.background = 'linear-gradient(to right, yellow 50%, red 50%)';
+
+        Object.assign(dayElem.style, {
+          borderRadius: '50%',
+          color: 'black',
+          fontWeight: 'bold'
         });
-    }
 
-    // Initialisierung
+        if (dayElem.classList.contains('prevMonthDay') || dayElem.classList.contains('nextMonthDay')) {
+          dayElem.style.opacity = '0.3';
+          dayElem.style.pointerEvents = 'none';
+        }
+      }
+    });
+  }
+
+  function loadBookings() {
+    return fetch(SHEET_CSV_URL)
+      .then(res => res.ok ? res.text() : Promise.reject('CSV-Fehler ' + res.status))
+      .then(txt => {
+        const lines = txt.trim().split('\n');
+        const data = lines.slice(1).map(line => line.split(',').map(c => c.trim()));
+        bookedRanges = data.filter(r => r[2] === 'booked').map(r => ({ from: r[0], to: r[1] }));
+        requestedRanges = data.filter(r => r[2] === 'requested').map(r => ({ from: r[0], to: r[1] }));
+      });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
     loadBookings().then(initCalendar).catch(() => initCalendar());
+  });
 
-    // Reset-Button
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      window.fp.clear();
-      document.getElementById('bookingForm').reset();
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    window.fp.clear();
+    document.getElementById('bookingForm').reset();
+  });
+
+  document.getElementById('bookingForm').addEventListener('submit', function(evt) {
+    evt.preventDefault();
+    const fd = new FormData(this);
+    const [s, e] = window.fp.selectedDates;
+      if (!s || !e) {
+    alert('Bitte Zeitraum auswählen!');
+    return;
+  }
+
+  // Personen prüfen
+  const adults = parseInt(fd.get('adults'), 10) || 0;
+  const children = parseInt(fd.get('children'), 10) || 0;
+
+  if (adults < 1) {
+    alert('Mindestens 1 Erwachsener muss angegeben werden.');
+    return;
+  }
+
+  if (adults + children > 5) {
+    alert('Maximal 5 Personen (Erwachsene + Kinder) erlaubt.');
+    return;
+  }
+
+  // Mindestaufenthalt: mindestens 3 Tage (Anreise + 1 Tag + Abreise)
+  const diffDays = Math.floor((e - s) / (1000 * 60 * 60 * 24));
+  if (diffDays < 2) {
+    alert('Der Mindestaufenthalt beträgt 3 Tage (2 Übernachtungen).');
+    return;
+  }
+
+  // Hauptsaison prüfen: nur Sonntag–Sonntag erlaubt
+  const highSeasonStart = new Date('2025-06-29');
+  const highSeasonEnd = new Date('2025-08-24');
+
+  if (s >= highSeasonStart && e <= highSeasonEnd) {
+    const startDay = s.getDay(); // 0 = Sonntag
+    const endDay = e.getDay();
+    if (startDay !== 0 || endDay !== 0) {
+      alert('In der Hauptsaison (29.06.–24.08.) sind nur Buchungen von Sonntag bis Sonntag erlaubt.');
+      return;
+    }
+  }
+
+
+    if (!s || !e) return alert('Bitte Zeitraum auswählen!');
+    const from = formatLocal(s), to = formatLocal(e);
+    const baseParams = {
+      renter_name: fd.get('name'),
+      renter_email: fd.get('email'),
+      period: fd.get('dates'),
+      adults: fd.get('adults'),
+      children: fd.get('children'),
+      notes: fd.get('notes')
+    };
+    emailjs.send(SERVICE_ID, TEMPLATE_GUEST, { ...baseParams, to_email: baseParams.renter_email });
+    emailjs.send(SERVICE_ID, TEMPLATE_HOST, { ...baseParams, to_email: HOST_EMAIL });
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLScwMqt-8oddiQSou4MSV67-L2hZy0HHpiU33FCx9Qwi5iYE-w/formResponse", {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'entry.300227772': from,
+        'entry.1230807520': to,
+        'entry.39347162': 'requested'
+      })
     });
+    requestedRanges.push({ from, to });
+    initCalendar();
+    alert('Anfrage gesendet!');
+    this.reset();
+    document.getElementById('adults').value = 2;
+    document.getElementById('children').value = 0;
+  });
 
-    // Formular absenden
-    document.getElementById('bookingForm').addEventListener('submit', function(evt) {
-      evt.preventDefault();
-      const fd = new FormData(this);
-      const [s,e] = window.fp.selectedDates;
-      if (!s || !e) { alert('Bitte Zeitraum auswählen!'); return; }
-      const adults = parseInt(fd.get('adults'), 10) || 0;
-      const children = parseInt(fd.get('children'), 10) || 0;
-      if (adults + children > 5) { alert('Maximal 5 Personen (Erwachsene+Kinder)'); return; }
-      if (adults > 4) { alert('Maximal 4 Erwachsene'); return; }
-      const from = formatLocal(s), to = formatLocal(e);
-      const baseParams = { renter_name: fd.get('name'), renter_email: fd.get('email'), period: fd.get('dates'), adults: fd.get('adults'), children: fd.get('children'), notes: fd.get('notes') };
-      emailjs.send(SERVICE_ID, TEMPLATE_GUEST, { ...baseParams, to_email: baseParams.renter_email });
-      emailjs.send(SERVICE_ID, TEMPLATE_HOST, { ...baseParams, to_email: HOST_EMAIL });
-      fetch(FORM_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ [ENTRY_FROM]: from, [ENTRY_TO]: to, [ENTRY_STATUS]: 'requested' }) });
-      requestedRanges.push({ from, to }); initCalendar();
-      alert('Anfrage gesendet!');
-      this.reset(); document.getElementById('adults').value=2; document.getElementById('children').value=0;
-    });
-
-    // Input-Limits
-    document.getElementById('children').addEventListener('input', function() { if (this.value>3) this.value=3; });
-    document.getElementById('adults').addEventListener('input', function() { if (this.value>4) this.value=4; });
-  </script>
+  document.getElementById('children').addEventListener('input', function () {
+    if (this.value > 3) this.value = 3;
+  });
+  document.getElementById('adults').addEventListener('input', function () {
+    if (this.value > 4) this.value = 4;
+  });
+</script>
 </body>
 </html>
